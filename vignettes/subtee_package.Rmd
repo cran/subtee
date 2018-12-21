@@ -1,0 +1,127 @@
+---
+title: "The subtee Package"
+author: " "
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+In this vignette we showcase the estimation functions of the `subtee` package. We provide three ways for estimating the treatment effects in subgroups: unadjusted estimation (`unadj`), model averaging (`modav`), and using bootstrap bias adjustment (`bagged`).
+
+
+## Analyzing the data
+
+We use the prostate cancer dataset that was used in Rosenkranz (2016) to illustrate the usage of the package. The dataset consists of n=475 subjects randomized to a control group or diethylstilbestrol. The considered endpoint is survival time in months. There are six subgroup defining variables to consider: existence of bone metastasis (BM), disease stage (3 or 4),  performance (PF), history of cardiovascular events (HX), age, and weight. While age and weight are continuous covariates, they are dichotomized (age $\leq$ 65, $>$ 65 and weight $\leq$ 100, $>$ 100) for obtaining subgroups as in Rosenkranz (2016).
+
+The considered endpoint is survival time in months and Cox proportional hazards models are fitted. 
+We first start producing the treatment effect estimates for all subgroups, using
+the `unadj`, `modav` and `bagged` functions.
+
+```{r load data, show='hold'}
+library(ggplot2)
+library(subtee)
+################################################################################
+# We use the dataset from Rosenkranz (2016) https://onlinelibrary.wiley.com/doi/abs/10.1002/bimj.201500147
+# to illustrate the methods proposed in this work.
+# The data comes from a clinical trial of an prostate cancer treatment
+# Data is loaded from Royston, Patrick, and Willi Sauerbrei. Multivariable model-building: a pragmatic approach to regression anaylsis based on fractional polynomials for modelling continuous variables. Vol. 777. John Wiley & Sons, 2008. https://www.imbi.uni-freiburg.de/Royston-Sauerbrei-book
+data_url = "https://www.imbi.uni-freiburg.de/imbi/Royston-Sauerbrei-book/Multivariable_Model-building/downloads/datasets/adv_prostate_ca.zip"
+temp <- tempfile()
+download.file(data_url, temp, cacheOK = FALSE)
+prca = read.csv(unz(temp, "adv_prostate_ca/adv_prostate_ca.csv"))
+names(prca) = toupper(names(prca))
+
+```
+
+##  `subbuild` function
+
+We first use the `subbuild` function to create the subgroup defining binary covariates. This function takes the dataset as a first argument, and then a series of expressions to define the subgroup indicator variables (see ?subbuild for more options on how to generate binary subgroup indicators based on a data-set). Note that we also use the option dupl.rm = TRUE to remove duplicate subgroups. The output of the `subbuild` is a data.frame that might then be concatenated with the original dataset to be used in the other functions. This step can be ommited if the original dataset already contains the subgroup defining indicator variables. 
+
+```{r data prep, show='hold'}
+cand.groups <- subbuild(prca, dupl.rm = TRUE,
+                        BM == 1, PF == 1, HX == 1,
+                        STAGE == 4, AGE > 65, WT > 100)
+head(cand.groups)
+fitdat <- cbind(prca, cand.groups)
+subgr.names <- names(cand.groups)
+prog <- as.formula(paste(" ~ ", paste0("`", names(cand.groups),"`", collapse = " + ")))
+```
+
+Before investigating how the treatment effect differs across the subgroups we first fit the overall model, adjusting for the subgroup indicators only as prognostic covariates. Since we have survival endpoint, we use `coxph` from the `survival` package as fitting function. 
+
+```{r overall model, show='hold'}
+library(survival)
+form <- as.formula(paste("Surv(SURVTIME,CENS) ~ RX +", paste0("`", names(cand.groups),"`", collapse = " + ")))
+coxph(form, data=fitdat, ties = "breslow")
+```
+We see that the new treatment leads to better outcomes when compared to control, as the overall treatment effect (RX) is negative. However, its confidence interval covers the no-effect value of 0.
+
+##  `unadj` function
+
+Unadjusted subgroup treatment effect estimates are obtained via the `unadj` function. We fit the models including the six subgroup indicators as prognostic factors as well, which are added through the `covars` argument as a formula. The `unadj` function loops through the $P$ variables specified in the `subgr` argument, fitting the models 
+
+\begin{equation}
+M_p:\ \lambda_{pi}(t)= \lambda_{p0}(t) \exp\left\{\beta_p z_i + 
+(\gamma_p + \delta_p z_i)s_{pi} +  \sum_{k = 1}^{K} \tau_k x_{ik} \right\}
+\label{model.cox}
+\end{equation}
+
+for $p=1,...,P$. In this example, we make use of the `...` option to pass the option `ties = "breslow"` to `coxph`.
+
+```{r unadj, show='hold'}
+### Unadjusted estimates
+res_unadj = unadj(resp = "SURVTIME", trt = "RX", subgr = subgr.names,
+                  data = fitdat, covars = prog, 
+                  event = "CENS", fitfunc = "coxph", ties = "breslow")
+res_unadj
+```
+
+The output shows first the treatment effect estimates (trtEff) in the subgroups and corresponding lower and upper bounds of the unadjusted confidence intervals (LB and UB respectively). A second table is then displayed with the information on the difference in treatment effect in subgroups vs. their complements. The treatment effects are on same scale as returned by the linear predictictor of the specified `fitfunc`.  In this example, the treatment effects are expressed in terms of the log-hazard ratios.
+
+Using the unadjusted estimates for subgroups leads to the conclusion that there may be subgroups with differential treatment effect. In particular, patients with bone metastasis and patients younger than 65 may have a differential benefit from the treatment. This is also observed when looking at the interaction effects between these covariates and treatment. These results needs to be interpreted with caution as this is only an exploratory analysis.
+
+##  `modAv` function
+
+We use the `modAv` function to obtain the model averaging estimates. In this case, we use the same options as in the `unadj` function, so we used the default values to set all the models with equal prior weights and no prior weight for the overall model. 
+
+
+```{r modav, show='hold'}
+### ModelAveraging estimates
+res_modav = modav(resp = "SURVTIME", trt = "RX", subgr = subgr.names,
+                  data = fitdat, covars = prog, 
+                  event = "CENS", fitfunc = "coxph", ties = "breslow")
+res_modav
+
+```
+
+Model averaging has the effect of shrinking the estimates towards the overall treatment effect. Therefore, it may help in adjusting for potential "random high bias". In this sense, we observe that the treatment effects for the subgroups `BM == 1` and `Age < 65` are closer to the overall treament effect when using model averaging. All confidence intervals for treatment effects in subgroups cover the overall treatment effect. 
+
+## `bagged` function
+
+We obtain the bagged estimates using the `bagged` function. Note that we should also provide to the function how the subgroup is selected (`select.by = "BIC"`) and the number of bootstrap to use (`B = 2000`). We also let the default option `stratify = TRUE`, which controls that the bootstrap samples have the same number of subjects in treatment and controls arms as the original dataset.
+
+
+```{r bagged, show='hold'}
+### Bagged estimates
+set.seed(321231) # set seed for reproducible results in the bootstrap samples
+res_bagged = bagged(resp = "SURVTIME", trt = "RX", subgr = subgr.names,
+                    data = fitdat, covars = prog, 
+                    event = "CENS", fitfunc = "coxph",
+                    select.by = "BIC", B = 200) #B = 2000)
+res_bagged
+```
+
+The bootstrap methods provides bias-adjusted estimates, which corrects for the bias that is introduced when selecting a subgroup. Therefore, it only makes sense to display the results of the selected subgroup. The user however may explore the results of the bootstrap samples, which are included in the output object. 
+
+The subgroup defined by `AGE>65` is the most selected in the bootstrap samples. This allows to 'correct' the estimates for selection bias. We observe a similar pattern as with model averaging. After using bootstrap, the treatment effect is closer to that on the overall population and its confidence interval even covers it. 

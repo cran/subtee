@@ -1,0 +1,14 @@
+import("ggplot2", "MASS", "survival")
+importFrom("stats", "AIC", "binomial", "pchisq", "rmultinom")
+importFrom("grDevices", "rgb")
+importFrom("matrixStats", "rowSds")
+importFrom("stats", "as.formula", "coef", "dnorm", "logLik",
+           "model.matrix", "model.frame", "pnorm", "qnorm", "quantile", "uniroot",
+           "vcov")
+importFrom("stats", "reformulate")
+importFrom("stats", "BIC", "family", "terms")
+export("subbuild", "modav", "unadj", "bagged")
+S3method("plot", "subtee")
+S3method("summary", "subtee")
+S3method("print", "summary.subtee")
+S3method("print", "subtee")
