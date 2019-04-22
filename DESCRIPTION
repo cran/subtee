@@ -1,8 +1,8 @@
 Package: subtee
 Type: Package
 Title: Subgroup Treatment Effect Estimation in Clinical Trials
-Version: 0.3-4
-Date: 2019-1-3
+Version: 0.3-5
+Date: 2019-3-4
 Author: Nicolas Ballarini [aut, cre], 
   Bjoern Bornkamp [aut], 
   Marius Thomas [aut, cre], 
@@ -20,6 +20,6 @@ VignetteBuilder: knitr
 Depends: R (>= 2.10)
 License: GPL-2
 NeedsCompilation: no
-Packaged: 2019-01-07 09:47:04 UTC; nico
+Packaged: 2019-04-22 09:30:23 UTC; nico
 Repository: CRAN
-Date/Publication: 2019-01-07 16:40:03 UTC
+Date/Publication: 2019-04-22 16:00:03 UTC

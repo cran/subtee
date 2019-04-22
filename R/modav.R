@@ -49,7 +49,6 @@ umfit <- function(resp, trt, subgr, covars = NULL, data,
   sizes <- checkTrtSub(data, trt, subgr)
   
   fitfunc <- match.arg(fitfunc)
-  crit <- qnorm(1-level/2)
   nSub <- length(subgr)
   
   
@@ -81,13 +80,6 @@ umfit <- function(resp, trt, subgr, covars = NULL, data,
   ## actual model fitting
   res <- fitMods(resp, trt, subgr, covars, data, fitfunc,
                  event, exposure, ...)
-  ## extract overall estimates
-  tmpO <- c(res$fitOverall$ests$ests,
-            sqrt(res$fitOverall$ests$ests_vc))
-  names(tmpO) <- NULL
-  overall <- c(trtEff=tmpO[1],
-               LB=tmpO[1]-crit*tmpO[2],
-               UB=tmpO[1]+crit*tmpO[2])
 
   ## calculate posterior model weigths (only needed for modav)
   bic <- sapply(res$fitmods, function(x){
@@ -101,95 +93,26 @@ umfit <- function(resp, trt, subgr, covars = NULL, data,
     pr <- c(prior, nullprior)
   }
   postpr <- pr*exp(-0.5*bic)/sum(pr*exp(-0.5*bic))
-
+  
   ## produce estimates for subgroups
-  lst <- vector("list", nSub)
-  
-  if(type == "modav"){
-    prevs <- getPrev(data[,subgr, drop=FALSE])
-    tmpS <- tmpC <- tmpIA <- matrix(ncol=2, nrow=nSub+1)
-    for(i in 1:nSub){
-      for(j in 1:nSub){ # loop over predictions of all models
-        resFit <- res$fitmods[[j]]$ests
-        tmpS[j,] <- predSub(resFit$ests,
-                            resFit$ests_vc,
-                            w=prevs$wS[i,j])
-        tmpC[j,] <- predSub(resFit$ests,
-                            resFit$ests_vc,
-                            w=prevs$wC[i,j])
-        tmpIA[j,] <- predIA(resFit$ests, resFit$ests_vc,
-                            prevs$wS[i,j], prevs$wC[i,j])
-      }
-      tmpS[nSub+1,] <- tmpC[nSub+1,] <- tmpO # add the overall estimate
-      tmpIA[nSub+1,] <- c(0,0)
-      est <- c(qmixnorm(0.5, tmpS[,1], tmpS[,2], postpr),
-               qmixnorm(0.5, tmpC[,1], tmpC[,2], postpr),
-               qmixnorm(0.5, tmpIA[,1], tmpIA[,2], postpr))
-      ub <- c(qmixnorm(1-level/2, tmpS[,1], tmpS[,2], postpr),
-              qmixnorm(1-level/2, tmpC[,1], tmpC[,2], postpr),
-              qmixnorm(1-level/2, tmpIA[,1], tmpIA[,2], postpr))
-      lb <- c(qmixnorm(level/2, tmpS[,1], tmpS[,2], postpr),
-              qmixnorm(level/2, tmpC[,1], tmpC[,2], postpr),
-              qmixnorm(level/2, tmpIA[,1], tmpIA[,2], postpr))
-      lst[[i]] <- list(res$fitmods[[i]]$ests$pval[2],
-                       est[1:2], ub[1:2], lb[1:2],
-                       est[3], ub[3], lb[3])
-    }
-  }
-  if(type == "unadj"){
-    for(i in 1:nSub){
-      est <- numeric(3)
-      resFit <- res$fitmods[[i]]$ests
-      tmp1 <- predSub(resFit$ests,
-                      resFit$ests_vc,
-                      w=1)
-      tmp2 <- predSub(resFit$ests,
-                      resFit$ests_vc,
-                      w=0)
-      tmp3 <- c(resFit$ests[2], sqrt(resFit$ests_vc[2,2]))
-      est <- c(tmp1[1], tmp2[1], tmp3[1])
-      ub <- est+crit*c(tmp1[2], tmp2[2], tmp3[2])
-      lb <- est-crit*c(tmp1[2], tmp2[2], tmp3[2])
-      lst[[i]] <- list(resFit$pval[2],
-                       est[1:2], ub[1:2], lb[1:2],
-                       est[3], ub[3], lb[3])
-    }
-  }
-
-  pvals <- sapply(lst, function(x) x[[1]])
-  trt_eff <- c(sapply(lst, function(x) x[[2]]))
-  trt_ub <- c(sapply(lst, function(x) x[[3]]))
-  trt_lb <- c(sapply(lst, function(x) x[[4]]))
-  ia <- sapply(lst, function(x) x[[5]])
-  ia_ub <- sapply(lst, function(x) x[[6]])
-  ia_lb <- sapply(lst, function(x) x[[7]])
-  fitmods <- lapply(res$fitmods, function(x) x$model)
-  fitmods[["overall"]] <- res$fitOverall$model
-  
-  Group <- sapply(res$fitmods, function(x) x$subgrNam)
-  cmpl <- rep(c("Subgroup", "Complement"), nSub)
+  cis = getConfints(res, data, type, nSub, level, postpr)
   
   obj <- list()
-  obj$fitmods <- fitmods
-  obj$trtEff <- data.frame(Group = rep(Group, each=2),
-                           Subset = cmpl,
-                           LB = trt_lb, trtEff = trt_eff,
-                           UB = trt_ub)
-  obj$trtEffDiff <- data.frame(Group = Group,
-                               LB = ia_lb, trtEffDiff = ia,
-                               UB = ia_ub)
+  obj$fitMods <- res
+  obj$trtEff <- cis$trtEff
+  obj$trtEffDiff <- cis$trtEffDiff
   rownames(obj$trtEffDiff) <- NULL
   obj$n <- nrow(data)
   obj$subgroups <- res$subgroups
   obj$GroupSizes <- sizes
   obj$level <- level
-  obj$overall <- overall 
+  obj$overall <- cis$overall 
   names(postpr) <- c(subgr, "overall")
   obj$post.weights <- postpr
-  names(pvals) <- subgr
-  obj$pvals <- pvals
+  obj$pvals <- cis$pvals
   obj$type <- type
   obj$fitfunc <- fitfunc
+  obj$data <- data
   class(obj) <- "subtee"
   obj
 }

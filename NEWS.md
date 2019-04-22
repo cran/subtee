@@ -1,5 +1,12 @@
-USER-VISIBLE CHANGES (for detailed changes see ChangeLog in the source package)
+USER-VISIBLE CHANGES
 --------------------
+
+Version 0.3-5 (March 2019)
+-------------
+
+* Implemented a confint function to obtain confidence intervals in a separate function without re-running the models. 
+* Solves a problem that was caused by small sample sizes in subgroups in bootstrap samples
+
 
 Version 0.3-4 (January 2019)
 -------------

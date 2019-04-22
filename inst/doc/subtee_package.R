@@ -53,7 +53,7 @@ res_modav
 set.seed(321231) # set seed for reproducible results in the bootstrap samples
 res_bagged = bagged(resp = "SURVTIME", trt = "RX", subgr = subgr.names,
                     data = fitdat, covars = prog, 
-                    event = "CENS", fitfunc = "coxph",
+                    event = "CENS", fitfunc = "coxph", ties = "breslow",
                     select.by = "BIC", B = 200) #B = 2000)
 res_bagged
 

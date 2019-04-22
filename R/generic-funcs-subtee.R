@@ -7,19 +7,23 @@ print.subtee <- function(x, digits = 4, ...){
     rownames(trtEff) = rownames(trtEffDiff) = NULL
     if(x$boot_results$selected == "overall"){
       return(cat("No selected subgroup. In the bootstrap samples, the model with no interactions was selected",
-             x$post.weights[x$boot_results$selected],
-             "% of the times. See more details in x$boot_results\n"))
+             round(x$post.weights[x$boot_results$selected], 2),
+             "% of the times.\n"))
     }
   }
   cat("Trt. Effect Estimates\n")
   print(trtEff, digits = digits)
   cat("\nDifference in Trt. Effect vs Complement\n")
   print(trtEffDiff, digits = digits)
-  if(x$type == "bagged") cat("\n", x$boot_results$selected, 
-                             "is the selected subgroup.\n",
-                             "It was selected in ",
-                             x$post.weights[x$boot_results$selected],
-                             "% of the bootstrap samples. \n See more details in x$boot_results\n")
+  if(x$type == "bagged") {
+    cat(sprintf("\n %s is the selected subgroup.\n",x$boot_results$selected),
+        sprintf("It was selected in %s%% of %s bootstrap samples.\n",
+                round(x$post.weights[x$boot_results$selected], 2),
+                x$boot_results$B*(1-x$boot_results$boot_invalid/100)))
+    if(x$boot_results$boot_invalid>0) 
+      cat(sprintf(" %s%% the bootstrap samples could not be used\n",
+                  x$boot_results$boot_invalid))
+  }
   cat(sprintf("\nSubgroup Models fitted with \"%s\"\n", x$fitfunc))
   if (x$fitfunc=="coxph") cat("Effect estimates in terms of the log-hazard ratios\n")
 }

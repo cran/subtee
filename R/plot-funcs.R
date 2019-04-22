@@ -129,7 +129,7 @@ plot_compare_interaction <- function(x,
     res$level
   })
   if (length(unique(levels)) != 1){
-    stop("Different levels of confidence were used.")
+    warning("Different levels of confidence were used.")
   }
   if(main == "default")
     main <- sprintf("Point estimates with %s%%-CI", (1-x[[1]]$level)*100)
@@ -202,7 +202,7 @@ plot_compare_effect <- function(x, show.compl = FALSE,
     res$level
   })
   if (length(unique(levels)) != 1){
-    stop("Different levels of confidence were used.")
+    warning("Different levels of confidence were used.")
   }
   if(main == "default")
     main <- sprintf("Point estimates with %s%%-CI", (1-x[[1]]$level)*100)

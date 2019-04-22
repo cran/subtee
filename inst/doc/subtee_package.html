@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2019-01-07" />
+<meta name="date" content="2019-04-22" />
 
 <title>Introduction to subtee and Usage Instructions</title>
 
@@ -68,7 +68,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Introduction to subtee and Usage Instructions</h1>
-<h4 class="date"><em>2019-01-07</em></h4>
+<h4 class="date"><em>2019-04-22</em></h4>
 
 
 
@@ -213,21 +213,20 @@ res_modav
 <span class="kw">set.seed</span>(<span class="dv">321231</span>) <span class="co"># set seed for reproducible results in the bootstrap samples</span>
 res_bagged =<span class="st"> </span><span class="kw">bagged</span>(<span class="dt">resp =</span> <span class="st">&quot;SURVTIME&quot;</span>, <span class="dt">trt =</span> <span class="st">&quot;RX&quot;</span>, <span class="dt">subgr =</span> subgr.names,
                     <span class="dt">data =</span> fitdat, <span class="dt">covars =</span> prog, 
-                    <span class="dt">event =</span> <span class="st">&quot;CENS&quot;</span>, <span class="dt">fitfunc =</span> <span class="st">&quot;coxph&quot;</span>,
+                    <span class="dt">event =</span> <span class="st">&quot;CENS&quot;</span>, <span class="dt">fitfunc =</span> <span class="st">&quot;coxph&quot;</span>, <span class="dt">ties =</span> <span class="st">&quot;breslow&quot;</span>,
                     <span class="dt">select.by =</span> <span class="st">&quot;BIC&quot;</span>, <span class="dt">B =</span> <span class="dv">200</span>) <span class="co">#B = 2000)</span>
 res_bagged
 <span class="co">#&gt; Trt. Effect Estimates</span>
-<span class="co">#&gt;      Group     Subset      LB  trtEff     UB</span>
-<span class="co">#&gt; 1 AGE &gt; 65   Subgroup -0.2914 -0.0763 0.1388</span>
-<span class="co">#&gt; 2 AGE &gt; 65 Complement -1.7822 -0.8351 0.1120</span>
+<span class="co">#&gt;      Group     Subset      LB   trtEff     UB</span>
+<span class="co">#&gt; 1 AGE &gt; 65   Subgroup -0.2778 -0.07497 0.1279</span>
+<span class="co">#&gt; 2 AGE &gt; 65 Complement -1.7810 -0.83476 0.1114</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Difference in Trt. Effect vs Complement</span>
-<span class="co">#&gt;      Group       LB trtEffDiff    UB</span>
-<span class="co">#&gt; 1 AGE &gt; 65 -0.08617     0.7588 1.604</span>
+<span class="co">#&gt;      Group       LB trtEffDiff   UB</span>
+<span class="co">#&gt; 1 AGE &gt; 65 -0.07011     0.7598 1.59</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  AGE &gt; 65 is the selected subgroup.</span>
-<span class="co">#&gt;  It was selected in  48.5 % of the bootstrap samples. </span>
-<span class="co">#&gt;  See more details in x$boot_results</span>
+<span class="co">#&gt;  It was selected in 50% of 200 bootstrap samples.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Subgroup Models fitted with &quot;coxph&quot;</span>
 <span class="co">#&gt; Effect estimates in terms of the log-hazard ratios</span></code></pre></div>
