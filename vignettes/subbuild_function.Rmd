@@ -26,14 +26,14 @@ We use the `prca` data that was used in Rosenkranz (2016) https://onlinelibrary.
 ```{r, show='hold'}
 library(subtee)
 ################################################################################
-# The data comes from a clinical trial of an prostate cancer treatment
-# Data is loaded from Royston, Patrick, and Willi Sauerbrei. Multivariable model-building: a pragmatic approach to regression anaylsis based on fractional polynomials for modelling continuous variables. Vol. 777. John Wiley & Sons, 2008. https://www.imbi.uni-freiburg.de/Royston-Sauerbrei-book
-data_url = "https://www.imbi.uni-freiburg.de/imbi/Royston-Sauerbrei-book/Multivariable_Model-building/downloads/datasets/adv_prostate_ca.zip"
-temp <- tempfile()
-download.file(data_url, temp, cacheOK = FALSE)
-prca = read.csv(unz(temp, "adv_prostate_ca/adv_prostate_ca.csv"))
-names(prca) = toupper(names(prca))
-
+# The data comes from a clinical trial of an prostate cancer 
+# treatment
+# Data is loaded from Royston, Patrick, and Willi Sauerbrei. 
+# Multivariable model-building: a pragmatic approach to 
+# regression anaylsis based on fractional polynomials for 
+# modelling continuous variables. Vol. 777. John Wiley & Sons, 2008. 
+# https://www.imbi.uni-freiburg.de/Royston-Sauerbrei-book
+prca = get_prca_data()
 
 ```
 

@@ -1,24 +1,23 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
-## ---- show='hold'--------------------------------------------------------
+## ---- show='hold'-------------------------------------------------------------
 library(ggplot2)
 library(subtee)
 ################################################################################
 # We use the dataset from Rosenkranz (2016) https://onlinelibrary.wiley.com/doi/abs/10.1002/bimj.201500147
 # to illustrate the methods proposed in this work.
-# The data comes from a clinical trial of an prostate cancer treatment
-# Data is loaded from  Royston, Patrick, and Willi Sauerbrei. Multivariable model-building: a pragmatic approach to regression anaylsis based on fractional polynomials for modelling continuous variables. Vol. 777. John Wiley & Sons, 2008. https://www.imbi.uni-freiburg.de/Royston-Sauerbrei-book
-data_url = "https://www.imbi.uni-freiburg.de/imbi/Royston-Sauerbrei-book/Multivariable_Model-building/downloads/datasets/adv_prostate_ca.zip"
-temp <- tempfile()
-download.file(data_url, temp, cacheOK = FALSE)
-prca = read.csv(unz(temp, "adv_prostate_ca/adv_prostate_ca.csv"))
-names(prca) = toupper(names(prca))
-
-
+# The data comes from a clinical trial of an prostate cancer 
+# treatment
+# Data is loaded from  Royston, Patrick, and Willi Sauerbrei. 
+# Multivariable model-building: a pragmatic approach to 
+# regression anaylsis based on fractional polynomials for 
+# modelling continuous variables. Vol. 777. John Wiley & Sons, 2008. 
+# https://www.imbi.uni-freiburg.de/Royston-Sauerbrei-book
+prca = get_prca_data()
 
 ## first create candidate subgroups
 cand.groups <- subtee::subbuild(prca, dupl.rm = TRUE,
@@ -43,30 +42,37 @@ res_bagged = bagged(resp = "SURVTIME", trt = "RX", subgr = subgr.names,
                     event = "CENS", fitfunc = "coxph",
                     select.by = "BIC", B = 200) #B = 2000)
 
-## ---- fig.width = 5, fig.show='hold'-------------------------------------
+## ---- fig.width = 5, fig.show='hold'------------------------------------------
+ggplot(aes(y = Subset, x = trtEff, xmin = LB, xmax = UB, colour = Subset), 
+       data = res_unadj$trtEff) + 
+  geom_point(size = 2) +
+  geom_errorbarh(size = 1, show.legend = FALSE, height = 0) +
+  facet_grid(Group ~ .)
+
+## ---- fig.width = 5, fig.show='hold'------------------------------------------
 plot(res_unadj)
 
-## ---- fig.width = 6, fig.height = 5, fig.show='hold'---------------------
+## ---- fig.width = 6, fig.height = 5, fig.show='hold'--------------------------
 plot(res_unadj, show.compl = TRUE)
 
-## ---- fig.width = 6, fig.show='hold'-------------------------------------
+## ---- fig.width = 6, fig.show='hold'------------------------------------------
 plot(res_bagged, show.compl = TRUE)
 
-## ---- fig.width = 6, fig.height = 5, fig.show='hold'---------------------
+## ---- fig.width = 6, fig.height = 5, fig.show='hold'--------------------------
 plot(res_unadj, res_modav, palette = "Dark2")
 
-## ---- fig.width = 6, fig.height=5, fig.show='hold'-----------------------
+## ---- fig.width = 6, fig.height=5, fig.show='hold'----------------------------
 plot(res_unadj, res_modav, show.compl = TRUE)
 
-## ---- fig.width = 6, fig.show='hold'-------------------------------------
+## ---- fig.width = 6, fig.show='hold'------------------------------------------
 plot(res_unadj, res_modav, res_bagged, show.compl = TRUE)
 
-## ---- fig.width = 5, fig.show='hold'-------------------------------------
+## ---- fig.width = 5, fig.show='hold'------------------------------------------
 plot(res_unadj, type = "trtEffDiff")
 
-## ---- fig.width = 6, fig.show='hold'-------------------------------------
+## ---- fig.width = 6, fig.show='hold'------------------------------------------
 plot(res_unadj, res_modav, type = "trtEffDiff")
 
-## ---- fig.width = 6, fig.show='hold'-------------------------------------
+## ---- fig.width = 6, fig.show='hold'------------------------------------------
 plot(res_unadj, res_modav, res_bagged, type = "trtEffDiff")
 

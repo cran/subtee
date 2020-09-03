@@ -15,7 +15,7 @@ bagged(resp, trt, subgr, covars = NULL, data,
        event, exposure, 
        level = 0.1,
        B = 2000, mc.cores = 1, stratified = TRUE, 
-       select.by = c("BIC", "AIC"), ...)
+       select.by = c("BIC", "AIC"), quietly = FALSE, ...)
 }
 \arguments{
 \item{resp}{
@@ -80,6 +80,11 @@ treatment effect estimates.
 }
 \item{select.by}{
   Should the model selection be done using BIC or AIC? (default: BIC).
+}
+\item{quietly}{
+  A logical. By default (quietly = FALSE), \code{bagged} prints messages when a subgroup is not selected in any bootstrap sample or
+  when the variance for the bootstrap estimate of one or more subgroups could not be calculated.
+  If TRUE, these messages are not printed.
 }
 \item{\dots}{
  Other arguments passed to the model fitting function.

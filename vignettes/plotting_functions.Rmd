@@ -30,15 +30,14 @@ library(subtee)
 ################################################################################
 # We use the dataset from Rosenkranz (2016) https://onlinelibrary.wiley.com/doi/abs/10.1002/bimj.201500147
 # to illustrate the methods proposed in this work.
-# The data comes from a clinical trial of an prostate cancer treatment
-# Data is loaded from  Royston, Patrick, and Willi Sauerbrei. Multivariable model-building: a pragmatic approach to regression anaylsis based on fractional polynomials for modelling continuous variables. Vol. 777. John Wiley & Sons, 2008. https://www.imbi.uni-freiburg.de/Royston-Sauerbrei-book
-data_url = "https://www.imbi.uni-freiburg.de/imbi/Royston-Sauerbrei-book/Multivariable_Model-building/downloads/datasets/adv_prostate_ca.zip"
-temp <- tempfile()
-download.file(data_url, temp, cacheOK = FALSE)
-prca = read.csv(unz(temp, "adv_prostate_ca/adv_prostate_ca.csv"))
-names(prca) = toupper(names(prca))
-
-
+# The data comes from a clinical trial of an prostate cancer 
+# treatment
+# Data is loaded from  Royston, Patrick, and Willi Sauerbrei. 
+# Multivariable model-building: a pragmatic approach to 
+# regression anaylsis based on fractional polynomials for 
+# modelling continuous variables. Vol. 777. John Wiley & Sons, 2008. 
+# https://www.imbi.uni-freiburg.de/Royston-Sauerbrei-book
+prca = get_prca_data()
 
 ## first create candidate subgroups
 cand.groups <- subtee::subbuild(prca, dupl.rm = TRUE,
@@ -65,7 +64,24 @@ res_bagged = bagged(resp = "SURVTIME", trt = "RX", subgr = subgr.names,
 ```
 
 
+
 ## Plotting treatment effect estimates in subgroups
+
+The objects resulting from calling `unadj`, `modav` and `bagged` are `subtee` 
+objects that contain the results in a format that can be used to produce plots. 
+For example, the following produces a forest plot showing treatment effect 
+estimates for the subgroups and their complements:
+
+```{r, fig.width = 5, fig.show='hold'}
+ggplot(aes(y = Subset, x = trtEff, xmin = LB, xmax = UB, colour = Subset), 
+       data = res_unadj$trtEff) + 
+  geom_point(size = 2) +
+  geom_errorbarh(size = 1, show.legend = FALSE, height = 0) +
+  facet_grid(Group ~ .)
+```
+
+
+### Using the generic `plot` function provided in the package
 
 The default option for the generic plot function in the package for `subtee` objects shows the treatment effect in subgroups along with their confidence intervals. 
 

@@ -11,7 +11,7 @@ Plotting function for objects of class 'subtee'. Visualizes estimates and confid
 \method{plot}{subtee}(x, y = NULL, z = NULL, 
      type = c("trtEff", "trtEffDiff"),
      show.compl = FALSE,
-     xlab = "", ylab = "default", main = "default",
+     xlab = "default", ylab = "default", main = "default",
      them,
      point.size = 2.5, line.size = 1,
      palette = "default", ...)
@@ -43,7 +43,7 @@ Character. Label for x-axis.
     level of the uncertainty intervals.
 }
   \item{them}{
-ggplot2 theme. Use \code{\link[ggplot2]{theme}()} if you just need to tweak the display, or provide a complete ggplot2 theme (e.g \code{\link[ggplot2]{theme_bw}}()).
+ggplot2 theme. Use \code{\link[ggplot2]{theme}()} if you just need to tweak the display, or provide a complete ggplot2 theme (e.g \code{\link[ggplot2:theme]{theme_bw}}()).
 }
   \item{point.size}{
 Size for points, which denote point estimates of treatment effects. Default to 2.5.
@@ -52,7 +52,7 @@ Size for points, which denote point estimates of treatment effects. Default to 2
 Size for points, which denote confidence interval of treatment effects. Default to 1.
 }
   \item{palette}{
-A string providing a ggplot2 colour palette to use. This will be passed to the palette option in a \code{\link[ggplot2]{scale_colour_brewer}} sentence.
+A string providing a ggplot2 colour palette to use. This will be passed to the palette option in a \code{\link[ggplot2:scale_brewer]{scale_colour_brewer}} sentence.
 }
   \item{...}{
 Not used.

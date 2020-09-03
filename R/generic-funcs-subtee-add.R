@@ -100,10 +100,10 @@ getConfints = function(fitmods,
   obj$trtEff <- data.frame(Group = rep(Group, each=2),
                            Subset = cmpl,
                            LB = trt_lb, trtEff = trt_eff,
-                           UB = trt_ub)
+                           UB = trt_ub, stringsAsFactors = TRUE)
   obj$trtEffDiff <- data.frame(Group = Group,
                                LB = ia_lb, trtEffDiff = ia,
-                               UB = ia_ub)
+                               UB = ia_ub, stringsAsFactors = TRUE)
   rownames(obj$trtEffDiff) <- NULL
   obj$pvals = pvals
   obj$overall = overall

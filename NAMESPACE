@@ -7,7 +7,7 @@ importFrom("stats", "as.formula", "coef", "dnorm", "logLik",
            "vcov")
 importFrom("stats", "reformulate", "aggregate")
 importFrom("stats", "BIC", "family", "terms")
-export("subbuild", "modav", "unadj", "bagged")
+export("subbuild", "modav", "unadj", "bagged", "get_prca_data")
 S3method("plot", "subtee")
 S3method("summary", "subtee")
 S3method("print", "summary.subtee")

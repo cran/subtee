@@ -3,7 +3,7 @@ bagged <- function(resp, trt, subgr, covars = NULL, data,
                    event, exposure, 
                    level = 0.1,
                    B = 2000, mc.cores = 1, stratified = TRUE, 
-                   select.by = c("BIC", "AIC"), ...) {
+                   select.by = c("BIC", "AIC"), quietly = FALSE, ...) {
   ## argument checking
   ## allow specification of non-character resp and trt
   ## (do not use this in non-interactive use of margMods)
@@ -142,10 +142,12 @@ bagged <- function(resp, trt, subgr, covars = NULL, data,
                        ComplEff = ComplEff)
   
   not_selected = paste(subgr[(which(InteractionEst$percent_selected[-(nSub+1)] == 0))])
-  if (length(not_selected) > 0) message(paste0("The subgroup(s) ", paste(not_selected, collapse = ", "),
-                                               " were not selected in the bootstrap samples and a corrected estimate is not available. Returning NA."))
-  if(any(is.nan(InteractionEst$se.bagg_red)) & B < 2000) message("The variance for the bootstrap estimate of one or more subgroups could not be calculated because they were not selected in sufficient bootstrap samples. This may be due to a small number of bootstrap samples (B) or simply that the subgroup is not predictive.")
   
+  if(quietly == FALSE){
+    if (length(not_selected) > 0) message(paste0("The subgroup(s) ", paste(not_selected, collapse = ", "),
+                                               " were not selected in the bootstrap samples and a corrected estimate is not available. Returning NA."))
+    if(any(is.nan(InteractionEst$se.bagg_red)) & B < 2000) message("The variance for the bootstrap estimate of one or more subgroups could not be calculated because they were not selected in sufficient bootstrap samples. This may be due to a small number of bootstrap samples (B) or simply that the subgroup is not predictive.")
+  }
   model_fits <- results 
   rownames(model_fits) <- NULL
   

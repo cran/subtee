@@ -68,12 +68,14 @@ print.summary.subtee <- function(x, digits = 3, show.compl = FALSE, ...){
 plot.subtee <- function(x, y = NULL, z = NULL, 
                        type = c("trtEff", "trtEffDiff"),
                        show.compl = FALSE,
-                       xlab = "", ylab = "default", main = "default",
+                       xlab = "default", ylab = "default", main = "default",
                        them,
                        point.size = 2.5, line.size = 1,
                        palette = "default", ...){
   type = match.arg(type)
   compare = !(is.null(y)&is.null(z))
+  
+  if(ylab == "default") ylab <- ""
   if(!compare){
     if(palette == "default") palette = "Set1"
     if(type == "trtEff"){
