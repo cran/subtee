@@ -1,6 +1,6 @@
-186b424e357d2fbf52551afee764c84c *DESCRIPTION
+fcabcebf39528a67a92fc671001de238 *DESCRIPTION
 94b6fed6e9b948bf7d0816da4ee07e3d *NAMESPACE
-b649e84801e8c3619bfcf25e60354cfe *R/bagged.R
+e0b664a14157ce27b47016e5c4915878 *R/bagged.R
 0ae1ba1cc36e7efca6a54671bdd45bf1 *R/fitMods.R
 87901715f393eced7ad4a1b216d6a768 *R/generic-funcs-subtee-add.R
 257dc1ea66fdab68f4485918bd95bae3 *R/generic-funcs-subtee.R
@@ -8,8 +8,7 @@ fdbe263dffe9c6abef449ed67ebcfb3f *R/get_prca_data.R
 3d871dd92a538e30807ea5f8973bfe3d *R/input-checking.R
 6d9b2f942039d1d8cef4a350284de4c1 *R/mixNorm.R
 65bed3f622a1c5db7b57406cad320bd6 *R/modav.R
-0773ae216de1d7f99f5b252ac9bb3a6b *R/plot-funcs.R
-91a610bde264177c3fbc5238c44bc80c *R/plot-funcs2.R
+32afc2fb0388d6595714304152b938f2 *R/plot-funcs.R
 1248793eb2e754d27cc50c582184c393 *R/subbuild.R
 8a8f0213dd24a9f07594af797e8419ce *build/vignette.rds
 2d2471a5404d8013e3b88e68d91548e9 *data/datbin.RData
@@ -18,13 +17,13 @@ cc78a3a737395c3207d336cf19ffb84e *data/datnorm.RData
 7172da31bc15c450b16dbd8c1d2aa4e8 *data/datsurv.RData
 26cd03ce949a43f89b21a0afe23f11d8 *inst/doc/plotting_functions.R
 48141e7f6c0c762edd00989550daa181 *inst/doc/plotting_functions.Rmd
-3a994bc05ac2319eed476b7677dd8aec *inst/doc/plotting_functions.html
+eb49beded085619ffca889aece122539 *inst/doc/plotting_functions.html
 a620c7a71bce14e58291d2ab45785de9 *inst/doc/subbuild_function.R
 6bd3dcc9e9a4e1899796f9ebc120253d *inst/doc/subbuild_function.Rmd
-a73e83a519d8b4099d3992496bccb4e6 *inst/doc/subbuild_function.html
+19aba6f39cb0c8afaad11ef1d9fad4b7 *inst/doc/subbuild_function.html
 99215cf3cfffa63aa2055ec6f6d906aa *inst/doc/subtee_package.R
 8db807e2ac85f8c711c6cd8a4829e390 *inst/doc/subtee_package.Rmd
-559c0c9e5468f1ea6a964fdba8736d37 *inst/doc/subtee_package.html
+3d05fed90e9494097d5c8e06e680d675 *inst/doc/subtee_package.html
 5189c58df0d1c645369b41e48d37b3e6 *man/bagged.Rd
 cd574d815d90d25e5982a4ea04361a85 *man/confint.subtee.Rd
 ed69d6fcaed1302fc9942ca5616f53af *man/dat.Rd

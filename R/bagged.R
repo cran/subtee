@@ -77,7 +77,7 @@ bagged <- function(resp, trt, subgr, covars = NULL, data,
   if (!any(names(data) == trt)){
     data[trt] = model.frame(as.formula(paste0("~ ", trt)), data = data)
   }
-  trt_order = order(data[trt])
+  trt_order = do.call(order, list(data[[trt]]))
   ordered_data  <- data[trt_order, ]
   N <- nrow(ordered_data)
   if (!stratified){
@@ -203,7 +203,7 @@ baggingSoupr = function(target, results, boot_results, boot_results_ext,
   ## mean_u_estimate = 'Bias reduced estimate' 
   ## mean_u_bagg_estimate = 'Bias reduced bagged estimate'
   
-  res1 <- boot_mean[order(boot_mean$pstar, decreasing = T), ]
+  res1 <- boot_mean[do.call(order, list(unname(boot_mean$pstar), decreasing = T)), ]
   res1
   
   ## Variance of aggregated estimates ------------------------------------------
