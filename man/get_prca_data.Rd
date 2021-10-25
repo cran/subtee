@@ -15,6 +15,10 @@ get_prca_data()
   PATNR, AGE,  WT, SBP, DBP, SZ, AP, HG, SG, PF, HX, BM, STAGE, EKG, RX, SURVTIME, CENS, X_ST, X_D, X_T, X_T0
 }
 \references{
+Ballarini, N. Thomas, M., Rosenkranz, K. and Bornkamp, B. (2021) "{subtee}: An {R} Package for Subgroup Treatment Effect Estimation in Clinical Trials"
+Journal of Statistical Software, 99, 14, 1-17,
+doi: 10.18637/jss.v099.i14
+
 Royston, P., & Sauerbrei, W. (2008). Multivariable model-building: a pragmatic 
 approach to regression anaylsis based on fractional polynomials for modelling 
 continuous variables (Vol. 777). John Wiley & Sons.

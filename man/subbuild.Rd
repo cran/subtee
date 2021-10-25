@@ -55,7 +55,11 @@ complement is equal to another column) are removed from the final output.
 \value{
 A data frame of candidate subgroups.
 }
-
+\references{
+Ballarini, N. Thomas, M., Rosenkranz, K. and Bornkamp, B. (2021) "{subtee}: An {R} Package for Subgroup Treatment Effect Estimation in Clinical Trials"
+Journal of Statistical Software, 99, 14, 1-17,
+doi: 10.18637/jss.v099.i14
+}
 \seealso{
 \code{\link{bagged}}, \code{\link{modav}}, \code{\link{unadj}}
 }

@@ -134,6 +134,10 @@ the corresponding mixture distribution.
   treatment effect estimates (subgroup vs complement) and CI. 
 }
 \references{
+Ballarini, N. Thomas, M., Rosenkranz, K. and Bornkamp, B. (2021) "{subtee}: An {R} Package for Subgroup Treatment Effect Estimation in Clinical Trials"
+Journal of Statistical Software, 99, 14, 1-17,
+doi: 10.18637/jss.v099.i14
+
 Thomas, M., and Bornkamp, B. (2017) "Comparing Approaches to Treatment
 Effect Estimation for Subgroups in Early Phase Clinical Trials."
 Statistics in Biopharmaceutical Research, 9, 160-171,

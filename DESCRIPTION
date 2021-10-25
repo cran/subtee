@@ -1,8 +1,8 @@
 Package: subtee
 Type: Package
 Title: Subgroup Treatment Effect Estimation in Clinical Trials
-Version: 0.3-7.1
-Date: 2021-02-24
+Version: 1.0.0
+Date: 2021-10-25
 Author: Nicolas Ballarini [aut, cre], 
   Bjoern Bornkamp [aut], 
   Marius Thomas [aut, cre], 
@@ -15,13 +15,13 @@ Description: Naive and adjusted treatment effect estimation for subgroups. Model
   The package can be used for all commonly encountered type of outcomes in
   clinical trials (continuous, binary, survival, count). Additional functions
   are provided to build the subgroup variables to be used and to plot the 
-  results using forest plots.
+  results using forest plots. For details, see Ballarini et.al. (2021) <doi:10.18637/jss.v099.i14>.
 Imports: MASS, ggplot2, survival, matrixStats
 Suggests: knitr, rmarkdown, parallel, testthat
 VignetteBuilder: knitr
 Depends: R (>= 2.10)
 License: GPL-2
 NeedsCompilation: no
-Packaged: 2021-02-25 00:16:39 UTC; nicolasballarini
+Packaged: 2021-10-25 14:57:50 UTC; nicolasballarini
 Repository: CRAN
-Date/Publication: 2021-02-25 11:10:03 UTC
+Date/Publication: 2021-10-25 16:20:02 UTC

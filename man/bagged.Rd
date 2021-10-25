@@ -162,6 +162,10 @@ and the respective standard deviations of the estimates.
 
 }
 \references{
+Ballarini, N. Thomas, M., Rosenkranz, K. and Bornkamp, B. (2021) "{subtee}: An {R} Package for Subgroup Treatment Effect Estimation in Clinical Trials"
+Journal of Statistical Software, 99, 14, 1-17,
+doi: 10.18637/jss.v099.i14
+
 Rosenkranz, G.(2016) "Exploratory subgroup analysis in clinical trials by model
 selection", Biometrical Journal, 58, 1007-1259. doi: 10.1002/bimj.201500147
 }

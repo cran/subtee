@@ -62,6 +62,11 @@ Not used.
 Forest plot visualizing treatment effect estimates (if \code{type = "trtEff"}) or treatment-subgroup interactions in candidate subgroups (if \code{type = "trtEffDiff"}).
 }
 
+\references{
+Ballarini, N. Thomas, M., Rosenkranz, K. and Bornkamp, B. (2021) "{subtee}: An {R} Package for Subgroup Treatment Effect Estimation in Clinical Trials"
+Journal of Statistical Software, 99, 14, 1-17,
+doi: 10.18637/jss.v099.i14
+}
 \seealso{
 \code{\link{summary.subtee}}
 }

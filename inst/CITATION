@@ -1,0 +1,19 @@
+bibentry(bibtype = "Article",
+  title        = "{subtee}: An {R} Package for Subgroup Treatment Effect Estimation in Clinical Trials",
+  author       = c(person(given = c("Nicolas", "M."),
+                          family = "Ballarini"),
+                   person(given = "Marius",
+                          family = "Thomas"),
+                   person(given = c("Gerd", "K."),
+                          family = "Rosenkranz"),
+                   person(given = "Bj{\\\"o}rn",
+                          family = "Bornkamp")),
+  journal      = "Journal of Statistical Software",
+  year         = "2021",
+  volume       = "99",
+  number       = "14",
+  pages        = "1--17",
+  doi          = "10.18637/jss.v099.i14",
+  header       = "To cite subtee in publications use:"
+)
+
